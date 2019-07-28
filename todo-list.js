@@ -1,4 +1,4 @@
-class ToDoList {
+class ToDo {
 	constructor(id, title, tasks) {
 		this.id = id;
 		this.title = title;
@@ -7,7 +7,7 @@ class ToDoList {
 	}
 	saveToStorage(array) {
 		array.push(this);
-		localStorage.setItem('taskArr', JSON.stringify(array));
+		localStorage.setItem('toDoArr', JSON.stringify(array));
 	}
 
 	// deleteFromStorage() {
@@ -19,4 +19,12 @@ class ToDoList {
 	// updateTask() {
 
 	// }
+}
+
+class ToDoTask {
+	constructor(id, text) {
+		this.id = id;
+		this.text = text;
+		this.checked = false;
+	}
 }

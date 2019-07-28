@@ -11,7 +11,9 @@ header {
 	align-items: center;
 	background-color: #1f1f3d;
 	display: flex;
+	height: 5em;
 	justify-content: space-between;
+	padding: 0 1%;
 }
 
 main {
@@ -21,6 +23,7 @@ main {
 
 h1 {
 	color: #fff;
+	font-size: 250%;
 	font-weight: 800;
 	text-transform: uppercase;
 }
@@ -43,7 +46,8 @@ input {
 .header__input--search {
 	background: #ffffff url(images/search.svg) left no-repeat;
 	height: 50%;
-	width: 90%;
+	padding-left: 50px;
+	width: 30%;
 }
 
 nav {
@@ -52,7 +56,8 @@ nav {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	width: 30%;
+	padding: 2% 1%;
+	width: 40%;
 }
 
 .section__navigation--form {
@@ -84,17 +89,17 @@ nav {
 	border: 3px solid #1f1f3d;
 	border-radius: 5px;
 	color: #fff;
-	font-size: 110%;
+	font-size: 120%;
 	font-weight: 700;
 	height: 3em;
-	width: 95%;
+	margin: 2% 0;
+	width: 100%;
 }
 
 .form--input {
 	border: 2px solid #1f1f3d;
 	border-radius: 5px;
 	height: 4em;
-	width: 95%;
 }
 
 aside {
@@ -119,9 +124,24 @@ aside {
 	padding: 1%;
 }
 
-ul {
-	font-weight: 600;
-	list-style-image: url('images/checkbox.svg');
+li {
+	display: flex;
+}
+
+.li__delete {
+	height: 15px;
+	margin: 5px 10px; 
+	outline: none;
+	width: 15px;
+}
+
+.li--task {
+	list-style: none;
+}
+
+.form__label--input,
+.form__label--text {
+	width: 100%;
 }
 
 .section__section--status {
