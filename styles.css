@@ -33,9 +33,9 @@ h1 {
 }
 
 .header__form--search {
+	align-items: center;
 	display: flex;
-	flex-direction: column;
-	width: 25%;
+	width: 30%;
 }
 
 input {
@@ -46,7 +46,13 @@ input {
 .header__input--search {
 	height: 50%;
 	padding-left: 50px;
-	width: 30%;
+	width: 100%;
+}
+
+.header__image--search {
+	background-color: #C8D3D9;
+	border-radius: 2px;
+	padding: 2%;
 }
 
 nav {
@@ -74,10 +80,6 @@ nav {
 	width:  25px;
 }
 
-.header__image--search {
-	background-color: #C8D3D9;
-	border-radius: 
-}
 
 .form__image--add {
 	background-color: #1f1f3d;
@@ -107,6 +109,26 @@ aside {
 	width: 100%;
 }
 
+.aside__section--container {
+	align-items: center;
+	color: #1f1f3d;
+	display: flex;
+	flex-direction: column;
+	height: 60%;
+	justify-content: center;
+}
+
+.aside__section--p {
+	font-size: 200%;
+	font-weight: 600;
+	justify-content: center;
+}
+
+.welcome {
+	font-size: 400%;
+	font-weight: 700;
+}
+
 .section__tasks--status {
 	border: 2px solid;
 	padding: 0 1%;
@@ -121,6 +143,19 @@ aside {
 .section__section--tasks {
 	border-bottom: 2px solid;
 	padding: 1%;
+}
+
+.form__section--item {
+	display: flex;
+	align-items: center;
+}
+
+.form__label--input {
+	width: 100%;
+}
+
+.form__label--text {
+	width: 90%;
 }
 
 li {
@@ -138,11 +173,10 @@ li {
 	list-style: none;
 }
 
-.form__label--input,
-.form__label--text {
-	width: 100%;
-}
-
 .section__section--status {
 	padding: 1%;
+}
+
+.hidden {
+	display: none;
 }

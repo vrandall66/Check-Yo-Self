@@ -1,4 +1,5 @@
 var toDosArr = JSON.parse(localStorage.getItem('toDoArr')) || [];
+var toDoTasks = [];
 
 var addNewTask = document.querySelector('.form__image--add');
 var clearBtn = document.querySelector('.form__button--reset');
@@ -7,60 +8,82 @@ var newTask = document.querySelector('.form__label--text');
 var submitBtn = document.querySelector('.form__button-submit');
 var taskTitle = document.querySelector('.form__label--input');
 var taskSection = document.querySelector('.section__tasks');
+var welcomeText = document.querySelector('.aside__section--container');
 
-addNewTask.addEventListener('click', newTaskItem);
+addNewTask.addEventListener('click', createTaskItem);
 clearBtn.addEventListener('click', resetFields);
+newTaskSection.addEventListener('click', removeLiFromNav)
 submitBtn.addEventListener('click', submitHandler);
 window.addEventListener('load', onPageLoad);
 
 function onPageLoad(e) {
 	reinstantiateToDos(e);
+	welcomeMessage();
 }
 
 function submitHandler(e) {
-	transferTaskItems(e);
+	createNewToDo(e);
 	clearNavUl(e);
 }
 
-function getTasksFromDom() {
-	var tasks = [];
-	var tasksOnDom = document.querySelectorAll('.li--task');
-	tasksOnDom.forEach(function(li) {
-	var task = new ToDoTask(Date.now(), li.innerText);
-	tasks.push(task);
-	})
-	return tasks;
+function removeLiFromNav(e) {
+	if (e.target.className === 'li__delete') {
+		event.target.parentNode.remove();
+		// e.target.parentElement is what to remove
+		// parent Element has unique ID
+		// use ID to delete from array
+		// find element based on ID on document
+		// look into removing child node on parent node from line 30
+		// remove parent node
+		// splice? 
+		// remove ID at index of toDoTasks array
+	}
 }
 
-function transferTaskItems(e) {
+function welcomeMessage() {
+	if (toDosArr.length > 0) {
+    welcomeText.classList.add('hidden');
+	} if (toDosArr.length < 0) {
+		welcomeText.classList.remove('hidden');
+	}
+}
+
+function createNewToDo(e) {
 	e.preventDefault();
-	var tasks = getTasksFromDom();
-	console.log(tasks);
-	var toDo = new ToDo(Date.now(), taskTitle.value, tasks);
+	var toDo = new ToDo(Date.now(), taskTitle.value, toDoTasks);
 	toDo.saveToStorage(toDosArr);
 	appendNewTask(toDo);
 	taskTitle.value = "";
+	toDoTasks = [];
 };
 
-function newTaskItem(e) {
+function createTaskItem(e) {
 	e.preventDefault();
 	var id = Date.now();
+	var newToDoTask = new ToDoTask(id, newTask.value);
 	newTaskSection.insertAdjacentHTML('beforeend',
 		`<li class="li--task" data-id=${id}>
 		<input type="image" src="images/delete.svg" class="li__delete">${newTask.value}</li>`);
 	newTask.value = "";
+	toDoTasks.push(newToDoTask);
 }
 
 function makeLiList(toDo) {
 var returnString = "";
 	toDo.tasks.forEach(function(task) {
-	returnString += `<li class="li--task">
-	<input type="image" src="images/delete.svg" class="li__delete">${task.text}</li>`;
+		returnString += `<li class="li--task">
+		<input type="image" src="images/checkbox.svg" class="li__delete">${task.text}</li>`;
 	})
 	return returnString;
 }
 
 function appendNewTask(toDo) {
+	var urgent;
+  if (toDo.urgent) {
+    urgent = 'images/urgent-active.svg';
+  } else {
+    urgent = 'images/urgent.svg';
+  };
 	taskSection.insertAdjacentHTML('afterbegin',
 		`<section class="section__tasks--status" data-id=${toDo.id}>
 				<section class="section__section--title">
@@ -83,8 +106,6 @@ function appendNewTask(toDo) {
 function clearNavUl (e) {
 	document.querySelector('.section__ul').innerHTML = "";
 }
-
-
 
 function reinstantiateToDos(e) {
 	if (toDosArr !== []) {

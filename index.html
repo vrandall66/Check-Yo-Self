@@ -11,30 +11,36 @@
 <body>
 	<header id="header" class="header__top">
 		<h1>Check <span class="header__h1--span">Yo'</span> Self</h1>
-		<input type="text" name="header__input--search" class="header__input--search form--input">
-	</header>
-	<main>
-		<nav class="navigation">
-			<form class="container__navigation--form">
-				<section class="form__section--title">
-					<label for="form__label--title" class="form__label--title form__label">Task Title</label>
-					<input type="text" name="form__label--title" class="form__label--input form--input">
-					<ul class="section__ul"></ul>
-				</section>
-				<label for="form__label--item" class="form__label--item form__label">Task Item</label>
-				<section class="form__section--item">
-					<input type="text" name="form__label--item" class="form__label--text form--input">
-					<input type="image" src="images/plus.svg" class="form__image--add icon--large" alt="Plus sign icon">
-				</section>
-				<button type="submit" class="form__button-submit form__button">Make Task List</button>
-				<button type="reset" class="form__button--reset form__button">Clear All</button>
-				<button type="button" class="form__button--filter form__button">Filter by Urgency</button>
-			</form>
-		</nav>
-		<aside class="section__tasks">
-		</aside>
-	</main>
-</body>
-<script src="todo-list.js"></script>
-<script src="main.js"></script>
-</html>
+		<form class="header__form--search">
+			<input type="image" src="images/search.svg" class="header__image--search icon--large">
+			<input type="text" name="header__input--search" class="header__input--search form--input">
+		</header>
+		<main>
+			<nav class="navigation">
+				<form class="container__navigation--form">
+					<section class="form__section--title">
+						<label for="form__label--title" class="form__label--title form__label">Task Title</label>
+						<input type="text" name="form__label--title" class="form__label--input form--input">
+						<ul class="section__ul"></ul>
+					</section>
+					<label for="form__label--item" class="form__label--item form__label">Task Item</label>
+					<section class="form__section--item">
+						<input type="text" name="form__label--item" class="form__label--text form--input">
+						<input type="image" src="images/plus.svg" class="form__image--add icon--large" alt="Plus sign icon">
+					</section>
+					<button type="submit" class="form__button-submit form__button">Make Task List</button>
+					<button type="reset" class="form__button--reset form__button">Clear All</button>
+					<button type="button" class="form__button--filter form__button">Filter by Urgency</button>
+				</form>
+			</nav>
+			<aside class="section__tasks">
+				<section class="aside__section--container">
+				<p class="aside__section--p welcome">Welcome!</p>
+				<p class="aside__section--p">Let's start organizing.</p>
+			</section>
+			</aside>
+		</main>
+	</body>
+	<script src="todo-list.js"></script>
+	<script src="main.js"></script>
+	</html>

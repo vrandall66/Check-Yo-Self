@@ -19,6 +19,9 @@ class ToDo {
 	// updateTask() {
 
 	// }
+	// deleteTask() {
+
+	// }
 }
 
 class ToDoTask {
