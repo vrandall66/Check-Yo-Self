@@ -1,8 +1,8 @@
-var toDosArr = JSON.parse(localStorage.getItem('taskArr')) || [];
+var toDosArr = JSON.parse(localStorage.getItem('toDoArr')) || [];
 
 var addNewTask = document.querySelector('.form__image--add');
 var clearBtn = document.querySelector('.form__button--reset');
-var newTaskSection = document.querySelector('.form__section--title');
+var newTaskSection = document.querySelector('.section__ul');
 var newTask = document.querySelector('.form__label--text');
 var submitBtn = document.querySelector('.form__button-submit');
 var taskTitle = document.querySelector('.form__label--input');
@@ -10,12 +10,17 @@ var taskSection = document.querySelector('.section__tasks');
 
 addNewTask.addEventListener('click', newTaskItem);
 clearBtn.addEventListener('click', resetFields);
-submitBtn.addEventListener('click', transferTaskItems);
-// window.addEventListener('load', onPageLoad);
+submitBtn.addEventListener('click', submitHandler);
+window.addEventListener('load', onPageLoad);
 
-// function onPageLoad() {
-// 	persistedTask();
-// }
+function onPageLoad(e) {
+	reinstantiateToDos(e);
+}
+
+function submitHandler(e) {
+	transferTaskItems(e);
+	clearNavUl(e);
+}
 
 function getTasksFromDom() {
 	var tasks = [];
@@ -75,7 +80,22 @@ function appendNewTask(toDo) {
 			</section>`)
 }
 
+function clearNavUl (e) {
+	document.querySelector('.section__ul').innerHTML = "";
+}
 
+
+
+function reinstantiateToDos(e) {
+	if (toDosArr !== []) {
+		toDosArr.forEach(function(object) {
+			object = new ToDo(object.id, object.title, object.tasks, object.urgent);
+		})
+		toDosArr.forEach(function(toDo) {
+			appendNewTask(toDo);
+		})
+	}
+}
 
 function resetFields(e) {
 	// if (taskTitle.value === "" &&

@@ -44,7 +44,6 @@ input {
 }
 
 .header__input--search {
-	background: #ffffff url(images/search.svg) left no-repeat;
 	height: 50%;
 	padding-left: 50px;
 	width: 30%;
