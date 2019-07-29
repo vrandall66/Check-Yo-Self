@@ -11,9 +11,8 @@ var taskTitle = document.querySelector('.form__label--input');
 var taskSection = document.querySelector('.section__tasks');
 var welcomeText = document.querySelector('.aside__section--container');
 
-addNewTask.addEventListener('click', createTaskItem);
-nav.addEventListener('keyup', disableBtns);
-// clearBtn.addEventListener('click', disableClearBtn);
+addNewTask.addEventListener('click', addTaskHandler);
+nav.addEventListener('keyup', navHandler);
 newTaskSection.addEventListener('click', removeLiFromNav)
 submitBtn.addEventListener('click', submitHandler);
 window.addEventListener('load', onPageLoad);
@@ -21,12 +20,27 @@ window.addEventListener('load', onPageLoad);
 function onPageLoad(e) {
 	welcomeMessage();
 	reinstantiateToDos(e);
-	disableBtns(e);
+	disableClearBtn(e);
+	disableSubmitBtn(e);
+	checkTaskInputValue(e);
 }
 
 function submitHandler(e) {
 	createNewToDo(e);
 	clearNavUl(e);
+	disableSubmitBtn(e);
+}
+
+function navHandler(e) {
+	disableClearBtn(e);
+	disableSubmitBtn(e);
+	checkTaskInputValue(e);
+}
+
+function addTaskHandler(e) {
+	checkTaskInputValue(e);
+	createTaskItem(e);
+	checkTaskInputValue(e);
 }
 
 function removeLiFromNav(e) {
@@ -45,7 +59,7 @@ function removeLiFromNav(e) {
 
 function welcomeMessage() {
 	if (toDosArr.length > 0) {
-    welcomeText.classList.add('hidden');
+		welcomeText.classList.add('hidden');
 	}
 	if (toDosArr.length < 0) {
 		welcomeText.classList.remove('hidden');
@@ -61,6 +75,14 @@ function createNewToDo(e) {
 	toDoTasks = [];
 };
 
+function checkTaskInputValue(e) {
+	if (newTask.value === "") {
+		addNewTask.classList.add('disabled');
+	} else {
+		addNewTask.classList.remove('disabled');
+	}
+}
+
 function createTaskItem(e) {
 	e.preventDefault();
 	var id = Date.now();
@@ -73,7 +95,7 @@ function createTaskItem(e) {
 }
 
 function makeLiList(toDo) {
-var returnString = "";
+	var returnString = "";
 	toDo.tasks.forEach(function(task) {
 		returnString += `<li class="li--task">
 		<input type="image" src="images/checkbox.svg" class="li__delete">${task.text}</li>`;
@@ -83,28 +105,32 @@ var returnString = "";
 
 function appendNewTask(toDo) {
 	var urgent;
-  if (toDo.urgent) {
-    urgent = 'images/urgent-active.svg';
-  } else {
-    urgent = 'images/urgent.svg';
-  };
+	if (toDo.urgent) {
+		urgent = 'images/urgent-active.svg';
+	} else {
+		urgent = 'images/urgent.svg';
+	};
 	taskSection.insertAdjacentHTML('afterbegin',
 		`<section class="section__tasks--status" data-id=${toDo.id}>
-				<section class="section__section--title">
-					<h2 class="section__section--h2">${toDo.title}</h2>
-				</section>
-				<section class="section__section--tasks">
-					<ul class="section__ul--tasks">
+			<section class="section__section--title">
+				<h2 class="section__section--h2">${toDo.title}</h2>
+			</section>
+			<section class="section__section--tasks">
+				<ul class="section__ul--tasks">
 					${makeLiList(toDo)}
-					</ul>
-				</section>
-				<section class="section__section--status">
-					<input type="image" src="images/urgent.svg" name="section__input--urgent" class="section__input--urgent icon--small" alt="Red lightning bolt icon">
-					<label for="section__input--urgent">Urgent</label>
-					<input type="image" src="images/delete.svg" name="section__input--delete" class="section__input--delete icon--small" alt="Circle with X in the center">
-					<label for="section__input--delete">Delete</label>
-				</section>
-			</section>`)
+				</ul>
+			</section>
+		<section class="section__section--status">
+			<section class="section__section--left">
+				<input type="image" src="images/urgent.svg" name="section__input--urgent" class="section__input--urgent icon--small" alt="Red lightning bolt icon">
+				<label for="section__input--urgent" class="section__section--label">URGENT</label>
+			</section>
+			<section class="section__section--right">
+				<input type="image" src="images/delete.svg" name="section__input--delete" class="section__input--delete icon--small" alt="Circle with X in the center">
+				<label for="section__input--delete" class="section__section--label">DELETE</label>
+			</section>
+		</section>
+	</section>`)
 }
 
 function clearNavUl (e) {
@@ -122,17 +148,23 @@ function reinstantiateToDos(e) {
 	}
 }
 
-function disableBtns(e) {
+function disableClearBtn(e) {
 	if (taskTitle.value !== "" || newTask.value !== "") {
-			clearBtn.disabled = false;
-			submitBtn.disabled = false;
-			clearBtn.classList.remove('disabled');
-			submitBtn.classList.remove('disabled');
+		clearBtn.disabled = false;
+		clearBtn.classList.remove('disabled');
 	} else {
-			clearBtn.disabled = true;
-			submitBtn.disabled = true;
-			clearBtn.classList.add('disabled');
-			submitBtn.classList.add('disabled');
+		clearBtn.disabled = true;
+		clearBtn.classList.add('disabled');
+	}
+}
+
+function disableSubmitBtn(e) {
+	if (taskTitle.value !== "") {
+		submitBtn.disabled = false;
+		submitBtn.classList.remove('disabled');
+	} else {
+		submitBtn.disabled = true;
+		submitBtn.classList.add('disabled');
 	}
 }
 
