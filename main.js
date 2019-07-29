@@ -3,6 +3,7 @@ var toDoTasks = [];
 
 var addNewTask = document.querySelector('.form__image--add');
 var clearBtn = document.querySelector('.form__button--reset');
+var nav = document.querySelector('.navigation');
 var newTaskSection = document.querySelector('.section__ul');
 var newTask = document.querySelector('.form__label--text');
 var submitBtn = document.querySelector('.form__button-submit');
@@ -11,14 +12,16 @@ var taskSection = document.querySelector('.section__tasks');
 var welcomeText = document.querySelector('.aside__section--container');
 
 addNewTask.addEventListener('click', createTaskItem);
-clearBtn.addEventListener('click', resetFields);
+nav.addEventListener('keyup', disableBtns);
+// clearBtn.addEventListener('click', disableClearBtn);
 newTaskSection.addEventListener('click', removeLiFromNav)
 submitBtn.addEventListener('click', submitHandler);
 window.addEventListener('load', onPageLoad);
 
 function onPageLoad(e) {
-	reinstantiateToDos(e);
 	welcomeMessage();
+	reinstantiateToDos(e);
+	disableBtns(e);
 }
 
 function submitHandler(e) {
@@ -43,7 +46,8 @@ function removeLiFromNav(e) {
 function welcomeMessage() {
 	if (toDosArr.length > 0) {
     welcomeText.classList.add('hidden');
-	} if (toDosArr.length < 0) {
+	}
+	if (toDosArr.length < 0) {
 		welcomeText.classList.remove('hidden');
 	}
 }
@@ -118,11 +122,18 @@ function reinstantiateToDos(e) {
 	}
 }
 
-function resetFields(e) {
-	// if (taskTitle.value === "" &&
-	// 	newTask.value === "") {
-	// 	clearBtn.disabled = true;
-	// }
+function disableBtns(e) {
+	if (taskTitle.value !== "" || newTask.value !== "") {
+			clearBtn.disabled = false;
+			submitBtn.disabled = false;
+			clearBtn.classList.remove('disabled');
+			submitBtn.classList.remove('disabled');
+	} else {
+			clearBtn.disabled = true;
+			submitBtn.disabled = true;
+			clearBtn.classList.add('disabled');
+			submitBtn.classList.add('disabled');
+	}
 }
 
 // function locateIndex(event) {
@@ -136,11 +147,4 @@ function resetFields(e) {
 
 // function locateTaskId(event) {
 // 	return parseInt(event.target.closest('.section__tasks--status').dataset.id);
-// }
-
-// function persistedTask() {
-// 	toDos.map(function(task) {
-// 		var taskReload = 
-// 	return new ToDoList()
-// 	});
 // }

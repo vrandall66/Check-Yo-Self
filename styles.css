@@ -80,7 +80,6 @@ nav {
 	width:  25px;
 }
 
-
 .form__image--add {
 	background-color: #1f1f3d;
 }
@@ -95,6 +94,12 @@ nav {
 	height: 3em;
 	margin: 2% 0;
 	width: 100%;
+}
+
+.disabled {
+	background-color: #C8D3D9;
+	border: 2px solid #C8D3D9;
+	color: #1f1f3d;
 }
 
 .form--input {
