@@ -1,18 +1,19 @@
 class ToDo {
 	constructor(id, title, tasks, urgent) {
-		this.id = id;
-		this.title = title;
-		this.tasks = tasks || [];
+		this.id 		= id;
+		this.title 	= title;
+		this.tasks 	= tasks || [];
 		this.urgent = urgent || false;
 	}
 	saveToStorage(array) {
-		array.push(this);
-		localStorage.setItem('toDoArr', JSON.stringify(array));
+		localStorage.setItem('toDosArr', JSON.stringify(array));
 	}
 
-	// deleteFromStorage() {
+	deleteFromStorage(toDoIndex) {
+    	toDosArr.splice(toDoIndex, 1);
+    	this.saveToStorage(toDosArr);
+  	};
 
-	// }
 	// updateToDo() {
 
 	// }
@@ -25,9 +26,9 @@ class ToDo {
 }
 
 class ToDoTask {
-	constructor(id, text) {
-		this.id = id;
-		this.text = text;
-		this.checked = false;
+	constructor(id, text, checked) {
+		this.id 			= id;
+		this.text 		= text;
+		this.checked 	= checked || false;
 	}
 }

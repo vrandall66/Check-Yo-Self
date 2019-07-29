@@ -11,19 +11,19 @@ header {
 	align-items: center;
 	background-color: #1f1f3d;
 	display: flex;
-	height: 7em;
+	height: 6em;
 	justify-content: space-between;
 	padding: 0 1%;
 }
 
 main {
 	display: flex;
-	height: 100vh;
+	height: 100%;
 }
 
 h1 {
 	color: #fff;
-	font-size: 350%;
+	font-size: 300%;
 	font-weight: 800;
 	text-transform: uppercase;
 }
@@ -46,7 +46,7 @@ input {
 }
 
 input[type="text"] {
-	font-size: 150%;
+	font-size: 100%;
 }
 
 .header__input--search {
@@ -64,9 +64,10 @@ nav {
 	color: #C8D3D9;
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	/*height: 100vh;*/
+	min-height: 100%;
 	padding: 2% 1%;
-	width: 40%;
+	width: 30%;
 }
 
 .section__navigation--form {
@@ -75,8 +76,8 @@ nav {
 }
 
 .icon--large {
-	height: 6em;
-	width: 6em;
+	height: 4.25em;
+	width: 4.25em;
 }
 
 .icon--small {
@@ -86,6 +87,8 @@ nav {
 
 .form__image--add {
 	background-color: #1f1f3d;
+	border: 5px solid #1f1f3d;
+	padding: 2%;
 }
 
 .form__button {
@@ -95,14 +98,15 @@ nav {
 	color: #fff;
 	font-size: 120%;
 	font-weight: 700;
-	height: 3.5em;
+	height: 3em;
 	margin: 2% 0;
 	width: 100%;
 }
 
 .disabled {
 	background-color: #C8D3D9;
-	border: 2px solid #C8D3D9;
+	border: 5px solid #C8D3D9;
+	border-radius: 5px; 
 	color: #1f1f3d;
 }
 
@@ -111,12 +115,6 @@ nav {
 	border-radius: 5px;
 	height: 3em;
 	padding-left: 0.75em;
-}
-
-aside {
-	background-color: #f3f6f7;
-	padding: 1%;
-	width: 100%;
 }
 
 .aside__section--container {
@@ -139,11 +137,19 @@ aside {
 	font-weight: 700;
 }
 
+.section__tasks {
+	background-color: #f3f6f7;
+	column-count: auto;
+	column-width: 20em;
+	padding: 1%;
+	width: 100%;
+}
+
 .section__tasks--status {
 	border: 2px solid;
-	margin: 2% 2% 4% 2%;
+	break-inside: avoid;
+	margin-bottom: 2%;
 	padding: 0 1%;
-	width: 45%;
 }
 
 .section__section--title {
@@ -177,6 +183,11 @@ aside {
 	align-items: center;
 }
 
+.form__label {
+	font-size: 90%;
+	font-weight: 600;
+}
+
 .form__label--input {
 	width: 100%;
 }
@@ -191,15 +202,15 @@ ul {
 
 li {
 	display: flex;
-	font-size: 150%;
+	font-size: 100%;
 	align-items: center;
 }
 
 .li__delete {
-	height: 2.5em;
+	height: 2em;
 	margin: 1em 1.5em; 
 	outline: none;
-	width: 2.5em;
+	width: 2em;
 }
 
 .li--task {
