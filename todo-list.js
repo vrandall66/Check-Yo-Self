@@ -1,9 +1,10 @@
 class ToDo {
-	constructor(id, title, tasks, urgent) {
+	constructor(id, title, tasks, urgent, finished) {
 		this.id 		= id;
 		this.title 	= title;
 		this.tasks 	= tasks || [];
 		this.urgent = urgent || false;
+		this.finished = finished || false;
 	}
 	saveToStorage(array) {
 		localStorage.setItem('toDosArr', JSON.stringify(array));

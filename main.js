@@ -24,6 +24,9 @@ function toDoTaskHandler(e) {
 	if (e.target.classList.contains('section__input--urgent')) {
 	urgentStatus(e);
 	}
+	if (e.target.classList.contains('li__delete')) {
+		checkedStatus(e);
+	}
 }
 
 function checkEventLocation(e) {
@@ -66,14 +69,6 @@ function navKeyHandler(e) {
 function removeLiFromNav(e) {
 	if (e.target.className === 'li__delete') {
 		event.target.parentNode.remove();
-
-		// parent Element has unique ID
-		// use ID to delete from array
-		// find element based on ID on document
-		// look into removing child node on parent node from line 30
-		// remove parent node
-		// splice? 
-		// remove ID at index of toDoTasks array
 	}
 }
 
@@ -90,12 +85,16 @@ function welcomeMessage() {
 	}
 }
 
-function createNewToDo(e) {
-	e.preventDefault();
+function mapLis() {
 	var tasks = Array.from(document.querySelectorAll('.li--temp-task'));
 	tasks = tasks.map(function(task) {
 		return new ToDoTask(task.id, task.innerText)
 	});
+	return tasks;
+}
+
+function createNewToDo(e) {
+	var tasks = mapLis();
 	var toDo = new ToDo(Date.now(), taskTitle.value, tasks);
 	toDosArr.push(toDo);
 	toDo.saveToStorage(toDosArr);
@@ -123,9 +122,10 @@ function appendTempTask(e) {
 
 function makeLiList(toDo) {
 	var returnString = "";
+	var checkboxSrc = ToDoTask.checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg';
 	toDo.tasks.forEach(function(task) {
-		returnString += `<li class="li--task">
-		<input type="image" src="images/checkbox.svg" class="li__delete">${task.text}</li>`;
+		returnString += `<li class="li--task" id=${task.id}>
+		<input type="image" src=${checkboxSrc} class="li__delete">${task.text}</li>`;
 	})
 	return returnString;
 }
@@ -165,13 +165,14 @@ function persistedToDos(e) {
 		var title = toDosArr[i].title;
 		var tasks = toDosArr[i].tasks;
 		var urgent = toDosArr[i].urgent;
+		var finished = toDosArr[i].finished;
 		var index = i;
-		reassignClass(id, title, tasks, urgent, i);
+		reassignClass(id, title, tasks, urgent, finished, i);
 	}
 }
 
-function reassignClass(id, title, tasks, urgent, i) {
-	var toDo = new ToDo(id, title, tasks, urgent);
+function reassignClass(id, title, tasks, urgent, finished, i) {
+	var toDo = new ToDo(id, title, tasks, urgent, finished);
 	toDosArr.splice(i, 1, toDo);
 };
 
@@ -202,21 +203,49 @@ function disableSubmitBtn(e) {
 	}
 }
 
+// function findLiId(id) {
+// 	return toDosArr.ToDo.tasks.findIndex(function(toDoItem) {
+// 		return parseInt(toDoItem.id) === parseInt(id);
+// 	})
+// }
+
+// 
+
+
+function checkedStatus(e) {
+	var taskId = e.target.closest('.li--task').id;
+	var toDoId = e.target.closest('.section__tasks--status').id;
+	var toDoIndex = findIndexByCardId(toDoId);
+	var taskIndex = findTaskIndexById(taskId);
+	toDosArr[toDoIndex].tasks[taskIndex].checked = !toDosArr[toDoIndex].tasks[taskIndex].checked;
+	toDosArr[toDoIndex].saveToStorage(toDosArr);
+	console.log(taskId, toDoId, toDoIndex, taskIndex);
+}
+
 function urgentStatus(e) {
 		var card = e.target.closest('.section__tasks--status');
 		var cardIndex = findIndexByCardId(card.id);
+		var greatGrandParent = e.target.parentNode.parentNode.parentNode;
 		toDosArr[cardIndex].urgent = !toDosArr[cardIndex].urgent;
+		e.target.src = toDosArr[cardIndex].urgent ? 'images/urgent-active.svg' : 'images/urgent.svg'
+		toDosArr[cardIndex].urgent ? greatGrandParent.classList.add('section__tasks--urgent') : greatGrandParent.classList.remove('section__tasks--urgent');
 		toDosArr[cardIndex].saveToStorage(toDosArr);
-	if (toDosArr[cardIndex].urgent) {
-		event.target.src = 'images/urgent-active.svg';
-	} else {
-		event.target.src = 'images/urgent.svg';
-	}
-}
-// var urgentSrc = toDo.urgent ? 'images/urgent-active.svg' : 'images/urgent.svg';
 
-function findToDoId(event) {
-  return parseInt(event.target.closest('.section__tasks--status').dataset.id);
+}
+// find toDo index by card id
+function findIndexByCardId(id) {
+	return toDosArr.findIndex(function(toDo) {
+		return parseInt(toDo.id) === parseInt(id);
+	})
+}
+
+function findTaskIndexById(id) {
+	return toDosArr[toDoIndex].tasks.findIndex(function(task) {
+		return parseInt(taskId) === parseInt(task.id);
+}
+
+function findToDoId(e) {
+  return parseInt(e.target.closest('.section__tasks--status').dataset.id);
 };
 
 function locateIndex() {
@@ -226,12 +255,6 @@ function locateIndex() {
 			return parseInt(i);
 		}
 	}
-}
-
-function findIndexByCardId(id) {
-	return toDosArr.findIndex(function(toDo) {
-		return parseInt(toDo.id) === parseInt(id);
-	})
 }
 
 function deleteToDoItem(e) {

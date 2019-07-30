@@ -146,20 +146,22 @@ nav {
 }
 
 .section__tasks--status {
-	border: 2px solid;
+	background-color: #fff;
+	border: 2px solid #C8D3D9;
 	break-inside: avoid;
 	margin-bottom: 2%;
 	padding: 0 1%;
 }
 
-.section__section--title {
-	border-bottom: 2px solid;
-	padding: 1%;
+.section__tasks--urgent {
+	background-color: #ffe89d;
+	border: 2px solid #ffc30c;
 }
 
+.section__section--title,
 .section__section--tasks {
-	border-bottom: 2px solid;
-	padding: 1% 0;
+	border-bottom: 2px solid #C8D3D9;
+	padding: 1%;
 }
 
 .section__section--status {
