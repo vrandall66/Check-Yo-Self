@@ -2,28 +2,40 @@ class ToDo {
 	constructor(id, title, tasks, urgent, finished) {
 		this.id 		= id;
 		this.title 	= title;
-		this.tasks 	= tasks || [];
+		this.tasks 	= (tasks || []).map(function(task) {
+	  	return new ToDoTask(task.id, task.text, task.checked)
+	  });
 		this.urgent = urgent || false;
 		this.finished = finished || false;
 	}
-	saveToStorage(array) {
-		localStorage.setItem('toDosArr', JSON.stringify(array));
+
+	static getById(id) {
+		return toDosArr.find(function(toDo) {
+			return toDo.id === parseInt(id);
+		})
 	}
 
-	deleteFromStorage(toDoIndex) {
-    	toDosArr.splice(toDoIndex, 1);
-    	this.saveToStorage(toDosArr);
-  	};
+	saveToStorage() {
+		localStorage.setItem('toDosArr', JSON.stringify(toDosArr));
+	}
 
-	// updateToDo() {
+	deleteFromStorage() {
+		var id = this.id;
+		var index = toDosArr.findIndex(function(toDo) {
+			return parseInt(toDo.id) === parseInt(id);
+		})
+		toDosArr.splice(index, 1);
+		this.saveToStorage();
+	};
 
-	// }
-	// updateTask() {
+	updateToDo(obj) {
+		Object.assign(this, obj)
+		this.saveToStorage();
+	}
 
-	// }
-	// deleteTask() {
-
-	// }
+	urgentImg() {
+		return this.urgent ? 'images/urgent-active.svg' : 'images/urgent.svg';
+	}
 }
 
 class ToDoTask {
@@ -31,5 +43,31 @@ class ToDoTask {
 		this.id 			= id;
 		this.text 		= text;
 		this.checked 	= checked || false;
+	}
+
+	static getById(id) {
+		var task;
+		toDosArr.forEach(function(toDo) {
+			toDo.tasks.forEach(function(t) {
+				if (parseInt(t.id) === parseInt(id)){
+					task = t;
+					return;
+				};
+			})
+		})
+		return task;
+	}
+
+	saveToStorage() {
+		localStorage.setItem('toDosArr', JSON.stringify(toDosArr));
+	}
+
+	updateTask(obj) {
+		Object.assign(this, obj)
+		this.saveToStorage();
+	}
+
+	checkedImg() {
+		return this.checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg';
 	}
 }

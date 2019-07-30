@@ -98,7 +98,7 @@ function createNewToDo(e) {
 	var toDo = new ToDo(Date.now(), taskTitle.value, tasks);
 	toDosArr.push(toDo);
 	toDo.saveToStorage(toDosArr);
-	appendNewTask(toDo);
+	appendNewToDo(toDo);
 	taskTitle.value = "";
 };
 
@@ -122,16 +122,15 @@ function appendTempTask(e) {
 
 function makeLiList(toDo) {
 	var returnString = "";
-	var checkboxSrc = ToDoTask.checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg';
 	toDo.tasks.forEach(function(task) {
 		returnString += `<li class="li--task" id=${task.id}>
-		<input type="image" src=${checkboxSrc} class="li__delete">${task.text}</li>`;
+		<input type="image" src=${task.checkedImg()} class="li__delete">${task.text}</li>`;
 	})
 	return returnString;
 }
 
-function appendNewTask(toDo) {
-	var urgentSrc = toDo.urgent ? 'images/urgent-active.svg' : 'images/urgent.svg';
+function appendNewToDo(toDo) {
+	var urgentSrc = toDo.urgentImg();
 	taskSection.insertAdjacentHTML('afterbegin',
 		`<section class="section__tasks--status" id=${toDo.id}>
 			<section class="section__section--title">
@@ -178,7 +177,7 @@ function reassignClass(id, title, tasks, urgent, finished, i) {
 
 function reinstantiateToDos() {
 	toDosArr.forEach(function(object) {
-		appendNewTask(object);
+		appendNewToDo(object);
 	});
 };
 
@@ -203,64 +202,28 @@ function disableSubmitBtn(e) {
 	}
 }
 
-// function findLiId(id) {
-// 	return toDosArr.ToDo.tasks.findIndex(function(toDoItem) {
-// 		return parseInt(toDoItem.id) === parseInt(id);
-// 	})
-// }
-
-// 
-
-
 function checkedStatus(e) {
 	var taskId = e.target.closest('.li--task').id;
-	var toDoId = e.target.closest('.section__tasks--status').id;
-	var toDoIndex = findIndexByCardId(toDoId);
-	var taskIndex = findTaskIndexById(taskId);
-	toDosArr[toDoIndex].tasks[taskIndex].checked = !toDosArr[toDoIndex].tasks[taskIndex].checked;
-	toDosArr[toDoIndex].saveToStorage(toDosArr);
-	console.log(taskId, toDoId, toDoIndex, taskIndex);
+	var task = ToDoTask.getById(taskId);
+	task.updateTask({checked: !task.checked});
+	e.target.src = task.checkedImg();
 }
 
 function urgentStatus(e) {
 		var card = e.target.closest('.section__tasks--status');
-		var cardIndex = findIndexByCardId(card.id);
+		var toDo = ToDo.getById(card.id);
 		var greatGrandParent = e.target.parentNode.parentNode.parentNode;
-		toDosArr[cardIndex].urgent = !toDosArr[cardIndex].urgent;
-		e.target.src = toDosArr[cardIndex].urgent ? 'images/urgent-active.svg' : 'images/urgent.svg'
-		toDosArr[cardIndex].urgent ? greatGrandParent.classList.add('section__tasks--urgent') : greatGrandParent.classList.remove('section__tasks--urgent');
-		toDosArr[cardIndex].saveToStorage(toDosArr);
-
-}
-// find toDo index by card id
-function findIndexByCardId(id) {
-	return toDosArr.findIndex(function(toDo) {
-		return parseInt(toDo.id) === parseInt(id);
-	})
+		toDo.updateToDo({urgent: !toDo.urgent});
+		e.target.src = toDo.urgentImg();
+		toDo.urgent ? greatGrandParent.classList.add('section__tasks--urgent') : greatGrandParent.classList.remove('section__tasks--urgent');
 }
 
-function findTaskIndexById(id) {
-	return toDosArr[toDoIndex].tasks.findIndex(function(task) {
-		return parseInt(taskId) === parseInt(task.id);
-}
-
-function findToDoId(e) {
-  return parseInt(e.target.closest('.section__tasks--status').dataset.id);
-};
-
-function locateIndex() {
-	var taskId = findToDoId();
-  for (var i = 0; i < toDosArr.length; i++) {
-    if (taskId === toDosArr[i].id) {
-			return parseInt(i);
-		}
-	}
-}
 
 function deleteToDoItem(e) {
 	if (e.target.classList.contains('section__input--delete')) {
 		var card = e.target.parentNode.parentNode.parentNode;
-		toDosArr[0].deleteFromStorage(findIndexByCardId(card.id));
+		var toDo = ToDo.getById(card.id);
+		toDo.deleteFromStorage();
 		card.remove();
 	}
 }
