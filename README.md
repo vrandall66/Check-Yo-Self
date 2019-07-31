@@ -32,8 +32,6 @@ My recreation of the provided comps:
 
 ![Desktop Version](images/CYDesktop2.png "Desktop layout")
 
-![Desktop Version](images/CYDesktop.png "Desktop layout")
-
 ![Desktop Version](images/CYDesktop3.png "Desktop layout")
 
 ![Mobile Version](images/CYMobile.png "Mobile layout")
