@@ -20,15 +20,19 @@ Repository can be found <a href="https://github.com/vrandall66/Check-Yo-Self">he
 
 ## Screenshots
 
+Provided comps:
+
 ![Provided static comp for desktop](images/CY-Desktop.jpg "Provided static comp for desktop")
 
 ![Provided static comp for desktop](images/CY-Desktop-2.jpg "Provided static comp for desktop")
 
 ![Provided static comp for mobile](images/CY-Mobile.jpg "Provided static comp for desktop")
 
-![Desktop Version](images/CYDesktop.png "Desktop layout")
+My recreation of the provided comps:
 
 ![Desktop Version](images/CYDesktop2.png "Desktop layout")
+
+![Desktop Version](images/CYDesktop.png "Desktop layout")
 
 ![Desktop Version](images/CYDesktop3.png "Desktop layout")
 
