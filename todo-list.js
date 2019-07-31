@@ -1,6 +1,6 @@
 class ToDo {
 	constructor(id, title, tasks, urgent, finished) {
-		this.id 		= id;
+		this.id 	= id;
 		this.title 	= title;
 		this.tasks 	= (tasks || []).map(function(task) {
 	  	return new ToDoTask(task.id, task.text, task.checked)
@@ -40,7 +40,7 @@ class ToDo {
 
 class ToDoTask {
 	constructor(id, text, checked) {
-		this.id 			= id;
+		this.id 		= id;
 		this.text 		= text;
 		this.checked 	= checked || false;
 	}

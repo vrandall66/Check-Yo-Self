@@ -13,16 +13,15 @@ var welcomeText 		= document.querySelector('.aside__section--container');
 nav.addEventListener('keyup', navKeyHandler);
 nav.addEventListener('click', checkEventLocation);
 taskSection.addEventListener('click', toDoTaskHandler);
-taskSection.addEventListener('mouseover', deleteBtnHover);
-taskSection.addEventListener('mouseout', deleteBtnHoverOut);
 window.addEventListener('load', onPageLoad);
 
 function toDoTaskHandler(e) {
 	if (e.target.classList.contains('section__input--delete')) {
-	deleteToDoItem(e);
+		enableDelete(e);
+		deleteToDoCard(e);
 	}
 	if (e.target.classList.contains('section__input--urgent')) {
-	urgentStatus(e);
+		urgentStatus(e);
 	}
 	if (e.target.classList.contains('li__delete')) {
 		checkedStatus(e);
@@ -121,9 +120,11 @@ function appendTempTask(e) {
 }
 
 function makeLiList(toDo) {
+	var italic = "";
 	var returnString = "";
 	toDo.tasks.forEach(function(task) {
-		returnString += `<li class="li--task" id=${task.id}>
+		task.checked ?  italic = "checked" : italic = "";
+		returnString += `<li class="li--task ${italic}" id=${task.id}>
 		<input type="image" src=${task.checkedImg()} class="li__delete">${task.text}</li>`;
 	})
 	return returnString;
@@ -131,12 +132,15 @@ function makeLiList(toDo) {
 
 function appendNewToDo(toDo) {
 	var urgentSrc = toDo.urgentImg();
+	var urgentClass = toDo.urgent ? "section__tasks--urgent" : "";
+	var urgentFont = toDo.urgent ? "section__label--urgent" : "";
+	var urgentBorder = toDo.urgent ? "section__section--borders" : "";
 	taskSection.insertAdjacentHTML('afterbegin',
-		`<section class="section__tasks--status" id=${toDo.id}>
-			<section class="section__section--title">
+		`<section class="section__tasks--status ${urgentClass}" id=${toDo.id}>
+			<section class="section__section--title ${urgentBorder}">
 				<h2 class="section__section--h2">${toDo.title}</h2>
 			</section>
-			<section class="section__section--tasks">
+			<section class="section__section--tasks ${urgentBorder}">
 				<ul class="section__ul--tasks">
 					${makeLiList(toDo)}
 				</ul>
@@ -144,7 +148,7 @@ function appendNewToDo(toDo) {
 		<section class="section__section--status">
 			<section class="section__section--left">
 				<input type="image" src=${urgentSrc} name="section__input--urgent" class="section__input--urgent icon--small" alt="Red lightning bolt icon">
-				<label for="section__input--urgent" class="section__section--label">URGENT</label>
+				<label for="section__input--urgent" class="section__section--label ${urgentFont}">URGENT</label>
 			</section>
 			<section class="section__section--right">
 				<input type="image" src="images/delete.svg" name="section__input--delete" class="section__input--delete icon--small" alt="Circle with X in the center">
@@ -207,35 +211,37 @@ function checkedStatus(e) {
 	var task = ToDoTask.getById(taskId);
 	task.updateTask({checked: !task.checked});
 	e.target.src = task.checkedImg();
+	console.log(e.target.closest('li'));
+	e.target.closest('li').classList.toggle('checked');
+	// enableDelete(e);
 }
 
 function urgentStatus(e) {
-		var card = e.target.closest('.section__tasks--status');
-		var toDo = ToDo.getById(card.id);
-		var greatGrandParent = e.target.parentNode.parentNode.parentNode;
-		toDo.updateToDo({urgent: !toDo.urgent});
-		e.target.src = toDo.urgentImg();
-		toDo.urgent ? greatGrandParent.classList.add('section__tasks--urgent') : greatGrandParent.classList.remove('section__tasks--urgent');
+	var card = e.target.closest('.section__tasks--status');
+	var toDo = ToDo.getById(card.id);
+	var gGParent = e.target.parentNode.parentNode.parentNode;
+	toDo.updateToDo({urgent: !toDo.urgent});
+	e.target.src = toDo.urgentImg();
+	toDo.urgent ? gGParent.classList.add('section__tasks--urgent') : gGParent.classList.remove('section__tasks--urgent');
+	toDo.saveToStorage();
 }
 
+// function enableDelete(e) {
+// 	var card = e.target.parentNode.parentNode.parentNode;
+// 	var toDo = ToDo.getById(card.id);
+// 	console.log(toDo.tasks.innerHTML);
+// 	if (toDo.tasks.every(function(task) {
+// 		return task.checked === true;
+// 	}))
+// 		e.target.src = 'images/delete-active.svg';
+// }
 
-function deleteToDoItem(e) {
-	if (e.target.classList.contains('section__input--delete')) {
-		var card = e.target.parentNode.parentNode.parentNode;
-		var toDo = ToDo.getById(card.id);
-		toDo.deleteFromStorage();
+function deleteToDoCard(e) {
+	var card = e.target.parentNode.parentNode.parentNode;
+	var toDo = ToDo.getById(card.id);
+	var newArr = toDo.tasks.filter(obj => obj.checked === true)
+	if (newArr.length === toDo.tasks.length) {
 		card.remove();
-	}
-}
-
-function deleteBtnHover(e) {
-	if (e.target.classList.contains('section__input--delete')) {
-		e.target.src = "images/delete-active.svg";
-	}
-}
-
-function deleteBtnHoverOut(e) {
-	if (e.target.classList.contains('section__input--delete')) {
-		e.target.src = 'images/delete.svg';
-	}
+		toDo.deleteFromStorage();
+	} 
 }
