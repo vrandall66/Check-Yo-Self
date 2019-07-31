@@ -1,5 +1,4 @@
 var toDosArr 				= JSON.parse(localStorage.getItem('toDosArr')) || [];
-
 var addNewTask		 	= document.querySelector('.form__image--add');
 var clearBtn 				= document.querySelector('.form__button--reset');
 var nav 						= document.querySelector('.navigation');
@@ -8,47 +7,12 @@ var newTask 				= document.querySelector('.form__label--text');
 var submitBtn 			= document.querySelector('.form__button-submit');
 var taskTitle 			= document.querySelector('.form__label--input');
 var taskSection 		= document.querySelector('.section__tasks');
-var welcomeText 		= document.querySelector('.aside__section--container');
 
 nav.addEventListener('keyup', navKeyHandler);
 nav.addEventListener('click', checkEventLocation);
 taskSection.addEventListener('click', toDoTaskHandler);
 window.addEventListener('load', onPageLoad);
 
-function toDoTaskHandler(e) {
-	if (e.target.classList.contains('section__input--delete')) {
-		enableDelete(e);
-		deleteToDoCard(e);
-	}
-	if (e.target.classList.contains('section__input--urgent')) {
-		urgentStatus(e);
-	}
-	if (e.target.classList.contains('li__delete')) {
-		checkedStatus(e);
-	}
-}
-
-function checkEventLocation(e) {
-	if (e.target.closest('.form__image--add')) {
-		checkTaskInputValue(e);
-		appendTempTask(e);
-		checkTaskInputValue(e);
-	}
-	if (e.target.closest('.form__button-submit')) {
-		createNewToDo(e);
-		clearNavUl(e);
-		disableClearBtn(e);
-		disableSubmitBtn(e);
-		welcomeMessage();
-	}
-	if (e.target.closest('.section__ul')) {
-		removeLiFromNav(e);
-	}
-	if (e.target === clearBtn) {
-		removeAllLi(e);
-		disableClearBtn(e);
-	}
-}
 
 function onPageLoad(e) {
 	welcomeMessage();
@@ -65,17 +29,42 @@ function navKeyHandler(e) {
 	checkTaskInputValue(e);
 }
 
-function removeLiFromNav(e) {
-	if (e.target.className === 'li__delete') {
-		event.target.parentNode.remove();
+function checkEventLocation(e) {
+	if (e.target.closest('.form__image--add')) {
+		checkTaskInputValue(e);
+		appendTempTask(e);
+		checkTaskInputValue(e);
+	}
+	if (e.target.closest('.form__button-submit')) {
+		createNewToDo(e);
+		clearToDoData(e);
+		disableClearBtn(e);
+		disableSubmitBtn(e);
+		welcomeMessage();
+	}
+	if (e.target.closest('.section__ul')) {
+		removeTasks(e);
+	}
+	if (e.target === clearBtn) {
+		clearTasks(e);
+		disableClearBtn(e);
 	}
 }
 
-function removeAllLi(e) {
-	newTaskSection.innerHTML = "";
+function toDoTaskHandler(e) {
+	if (e.target.classList.contains('section__input--delete')) {
+		deleteToDoCard(e);
+	}
+	if (e.target.classList.contains('section__input--urgent')) {
+		urgentStatus(e);
+	}
+	if (e.target.classList.contains('li__delete')) {
+		checkedStatus(e);
+	}
 }
 
 function welcomeMessage() {
+	var welcomeText = document.querySelector('.aside__section--container');
 	if (toDosArr.length > 0) {
 		welcomeText.classList.add('hidden');
 	}
@@ -84,7 +73,22 @@ function welcomeMessage() {
 	}
 }
 
-function mapLis() {
+function clearTasks(e) {
+	newTaskSection.innerHTML = "";
+}
+
+function removeTasks(e) {
+	if (e.target.className === 'li__delete') {
+		event.target.parentNode.remove();
+	}
+}
+
+function reassignClass(id, title, tasks, urgent, finished, i) {
+	var toDo = new ToDo(id, title, tasks, urgent, finished);
+	toDosArr.splice(i, 1, toDo);
+};
+
+function reassignTaskClass() {
 	var tasks = Array.from(document.querySelectorAll('.li--temp-task'));
 	tasks = tasks.map(function(task) {
 		return new ToDoTask(task.id, task.innerText)
@@ -93,12 +97,13 @@ function mapLis() {
 }
 
 function createNewToDo(e) {
-	var tasks = mapLis();
+	var tasks = reassignTaskClass();
 	var toDo = new ToDo(Date.now(), taskTitle.value, tasks);
 	toDosArr.push(toDo);
 	toDo.saveToStorage(toDosArr);
 	appendNewToDo(toDo);
 	taskTitle.value = "";
+	newTask.value = "";
 };
 
 function checkTaskInputValue(e) {
@@ -119,7 +124,7 @@ function appendTempTask(e) {
 	newTask.value = "";
 }
 
-function makeLiList(toDo) {
+function appendTask(toDo) {
 	var italic = "";
 	var returnString = "";
 	toDo.tasks.forEach(function(task) {
@@ -142,7 +147,7 @@ function appendNewToDo(toDo) {
 			</section>
 			<section class="section__section--tasks ${urgentBorder}">
 				<ul class="section__ul--tasks">
-					${makeLiList(toDo)}
+					${appendTask(toDo)}
 				</ul>
 			</section>
 		<section class="section__section--status">
@@ -158,7 +163,7 @@ function appendNewToDo(toDo) {
 	</section>`)
 }
 
-function clearNavUl (e) {
+function clearToDoData (e) {
 	document.querySelector('.section__ul').innerHTML = "";
 }
 
@@ -173,11 +178,6 @@ function persistedToDos(e) {
 		reassignClass(id, title, tasks, urgent, finished, i);
 	}
 }
-
-function reassignClass(id, title, tasks, urgent, finished, i) {
-	var toDo = new ToDo(id, title, tasks, urgent, finished);
-	toDosArr.splice(i, 1, toDo);
-};
 
 function reinstantiateToDos() {
 	toDosArr.forEach(function(object) {
@@ -211,30 +211,24 @@ function checkedStatus(e) {
 	var task = ToDoTask.getById(taskId);
 	task.updateTask({checked: !task.checked});
 	e.target.src = task.checkedImg();
-	console.log(e.target.closest('li'));
 	e.target.closest('li').classList.toggle('checked');
-	// enableDelete(e);
 }
 
 function urgentStatus(e) {
 	var card = e.target.closest('.section__tasks--status');
 	var toDo = ToDo.getById(card.id);
+	var text = e.target.nextSibling.nextSibling;
 	var gGParent = e.target.parentNode.parentNode.parentNode;
+	var gParentSibling1 = e.target.parentNode.parentNode.previousSibling.previousSibling;
+	var gParentSibling2 = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling;	
 	toDo.updateToDo({urgent: !toDo.urgent});
-	e.target.src = toDo.urgentImg();
-	toDo.urgent ? gGParent.classList.add('section__tasks--urgent') : gGParent.classList.remove('section__tasks--urgent');
 	toDo.saveToStorage();
+	toDo.urgent ? gGParent.classList.add('section__tasks--urgent') : gGParent.classList.remove('section__tasks--urgent');
+	toDo.urgent ? gParentSibling1.classList.add('section__section--borders') : gParentSibling1.classList.remove('section__section--borders');
+	toDo.urgent ? gParentSibling2.classList.add('section__section--borders') : gParentSibling2.classList.remove('section__section--borders');
+	toDo.urgent ? text.classList.add('section__label--urgent') : text.classList.remove('section__label--urgent');
+	e.target.src = toDo.urgentImg();
 }
-
-// function enableDelete(e) {
-// 	var card = e.target.parentNode.parentNode.parentNode;
-// 	var toDo = ToDo.getById(card.id);
-// 	console.log(toDo.tasks.innerHTML);
-// 	if (toDo.tasks.every(function(task) {
-// 		return task.checked === true;
-// 	}))
-// 		e.target.src = 'images/delete-active.svg';
-// }
 
 function deleteToDoCard(e) {
 	var card = e.target.parentNode.parentNode.parentNode;
