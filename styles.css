@@ -198,9 +198,12 @@ li {
 	width: 100%;
 }
 
-.section__section--title,
+.section__section--title {
+	border: 2px 0 solid #C8D3D9;
+	padding: 1%;
+}
+
 .section__section--tasks {
-	border-bottom: 2px solid #C8D3D9;
 	padding: 1%;
 }
 
