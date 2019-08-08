@@ -86,12 +86,12 @@ function removeTasks(e) {
 function reassignClass(id, title, tasks, urgent, finished, i) {
 	var toDo = new ToDo(id, title, tasks, urgent, finished);
 	toDosArr.splice(i, 1, toDo);
-};
+}
 
 function reassignTaskClass() {
 	var tasks = Array.from(document.querySelectorAll('.li--temp-task'));
 	tasks = tasks.map(function (task) {
-		return new ToDoTask(task.id, task.innerText)
+		return new ToDoTask(task.id, task.innerText);
 	});
 	return tasks;
 }
@@ -104,7 +104,7 @@ function createNewToDo(e) {
 	appendNewToDo(toDo);
 	taskTitle.value = "";
 	newTask.value = "";
-};
+}
 
 function checkTaskInputValue(e) {
 	if (newTask.value === "") {
@@ -131,7 +131,7 @@ function appendTask(toDo) {
 		task.checked ? italic = "checked" : italic = "";
 		returnString += `<li class="li--task ${italic}" id=${task.id}>
 		<input type="image" src=${task.checkedImg()} class="li__delete">${task.text}</li>`;
-	})
+	});
 	return returnString;
 }
 
@@ -160,7 +160,7 @@ function appendNewToDo(toDo) {
 				<label for="section__input--delete" class="section__section--label">DELETE</label>
 			</section>
 		</section>
-	</section>`)
+	</section>`);
 }
 
 function clearToDoData(e) {
@@ -168,22 +168,22 @@ function clearToDoData(e) {
 }
 
 function persistedToDos(e) {
-	for (var i = 0; i < toDosArr.length; i++) {
-		var id = toDosArr[i].id;
-		var title = toDosArr[i].title;
-		var tasks = toDosArr[i].tasks;
-		var urgent = toDosArr[i].urgent;
-		var finished = toDosArr[i].finished;
-		var index = i;
+	toDosArr.forEach(function (toDo, index) {
+		var id = toDo.id;
+		var title = toDo.title;
+		var tasks = toDo.tasks;
+		var urgent = toDo.urgent;
+		var finished = toDo.finished;
+		var i = index;
 		reassignClass(id, title, tasks, urgent, finished, i);
-	}
+	});
 }
 
 function reinstantiateToDos() {
 	toDosArr.forEach(function (object) {
 		appendNewToDo(object);
 	});
-};
+}
 
 function disableClearBtn(e) {
 	if (taskTitle.value !== "" ||
@@ -231,7 +231,7 @@ function urgentStatus(e) {
 function deleteToDoCard(e) {
 	var card = e.target.parentNode.parentNode.parentNode;
 	var toDo = ToDo.getById(card.id);
-	var newArr = toDo.tasks.filter(obj => obj.checked === true)
+	var newArr = toDo.tasks.filter(obj => obj.checked === true);
 	if (newArr.length === toDo.tasks.length) {
 		card.remove();
 		toDo.deleteFromStorage();
