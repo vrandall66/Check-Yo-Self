@@ -198,10 +198,9 @@ li {
 	width: 100%;
 }
 
-.section__section--title,
 .section__section--tasks {
 	border-bottom: 2px solid #C8D3D9;
-	padding: 1%;
+	border-top: 2px solid #C8D3D9;
 }
 
 .section__section--status {
@@ -239,6 +238,7 @@ li {
 
 .section__section--borders {
 	border-bottom: 2px solid #ffc30c;
+	border-top: 2px solid #ffc30c;
 }
 
 .section__tasks--urgent {

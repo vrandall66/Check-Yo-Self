@@ -1,12 +1,12 @@
-var toDosArr 				= JSON.parse(localStorage.getItem('toDosArr')) || [];
-var addNewTask		 	= document.querySelector('.form__image--add');
-var clearBtn 				= document.querySelector('.form__button--reset');
-var nav 						= document.querySelector('.navigation');
-var newTaskSection 	= document.querySelector('.section__ul');
-var newTask 				= document.querySelector('.form__label--text');
-var submitBtn 			= document.querySelector('.form__button-submit');
-var taskTitle 			= document.querySelector('.form__label--input');
-var taskSection 		= document.querySelector('.section__tasks');
+var toDosArr = JSON.parse(localStorage.getItem('toDosArr')) || [];
+var addNewTask = document.querySelector('.form__image--add');
+var clearBtn = document.querySelector('.form__button--reset');
+var nav = document.querySelector('.navigation');
+var newTaskSection = document.querySelector('.section__ul');
+var newTask = document.querySelector('.form__label--text');
+var submitBtn = document.querySelector('.form__button-submit');
+var taskTitle = document.querySelector('.form__label--input');
+var taskSection = document.querySelector('.section__tasks');
 
 nav.addEventListener('keyup', navKeyHandler);
 nav.addEventListener('click', checkEventLocation);
@@ -90,7 +90,7 @@ function reassignClass(id, title, tasks, urgent, finished, i) {
 
 function reassignTaskClass() {
 	var tasks = Array.from(document.querySelectorAll('.li--temp-task'));
-	tasks = tasks.map(function(task) {
+	tasks = tasks.map(function (task) {
 		return new ToDoTask(task.id, task.innerText)
 	});
 	return tasks;
@@ -127,8 +127,8 @@ function appendTempTask(e) {
 function appendTask(toDo) {
 	var italic = "";
 	var returnString = "";
-	toDo.tasks.forEach(function(task) {
-		task.checked ?  italic = "checked" : italic = "";
+	toDo.tasks.forEach(function (task) {
+		task.checked ? italic = "checked" : italic = "";
 		returnString += `<li class="li--task ${italic}" id=${task.id}>
 		<input type="image" src=${task.checkedImg()} class="li__delete">${task.text}</li>`;
 	})
@@ -142,7 +142,7 @@ function appendNewToDo(toDo) {
 	var urgentBorder = toDo.urgent ? "section__section--borders" : "";
 	taskSection.insertAdjacentHTML('afterbegin',
 		`<section class="section__tasks--status ${urgentClass}" id=${toDo.id}>
-			<section class="section__section--title ${urgentBorder}">
+			<section class="section__section--title">
 				<h2 class="section__section--h2">${toDo.title}</h2>
 			</section>
 			<section class="section__section--tasks ${urgentBorder}">
@@ -163,7 +163,7 @@ function appendNewToDo(toDo) {
 	</section>`)
 }
 
-function clearToDoData (e) {
+function clearToDoData(e) {
 	document.querySelector('.section__ul').innerHTML = "";
 }
 
@@ -180,7 +180,7 @@ function persistedToDos(e) {
 }
 
 function reinstantiateToDos() {
-	toDosArr.forEach(function(object) {
+	toDosArr.forEach(function (object) {
 		appendNewToDo(object);
 	});
 };
@@ -188,11 +188,11 @@ function reinstantiateToDos() {
 function disableClearBtn(e) {
 	if (taskTitle.value !== "" ||
 		newTask.value !== "") {
-			clearBtn.disabled = false;
-			clearBtn.classList.remove('disabled');
+		clearBtn.disabled = false;
+		clearBtn.classList.remove('disabled');
 	} else {
-			clearBtn.disabled = true;
-			clearBtn.classList.add('disabled');
+		clearBtn.disabled = true;
+		clearBtn.classList.add('disabled');
 	}
 }
 
@@ -209,7 +209,7 @@ function disableSubmitBtn(e) {
 function checkedStatus(e) {
 	var taskId = e.target.closest('.li--task').id;
 	var task = ToDoTask.getById(taskId);
-	task.updateTask({checked: !task.checked});
+	task.updateTask({ checked: !task.checked });
 	e.target.src = task.checkedImg();
 	e.target.closest('li').classList.toggle('checked');
 }
@@ -220,12 +220,10 @@ function urgentStatus(e) {
 	var text = e.target.nextSibling.nextSibling;
 	var gGParent = e.target.parentNode.parentNode.parentNode;
 	var gParentSibling1 = e.target.parentNode.parentNode.previousSibling.previousSibling;
-	var gParentSibling2 = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling;	
-	toDo.updateToDo({urgent: !toDo.urgent});
+	toDo.updateToDo({ urgent: !toDo.urgent });
 	toDo.saveToStorage();
 	toDo.urgent ? gGParent.classList.add('section__tasks--urgent') : gGParent.classList.remove('section__tasks--urgent');
 	toDo.urgent ? gParentSibling1.classList.add('section__section--borders') : gParentSibling1.classList.remove('section__section--borders');
-	toDo.urgent ? gParentSibling2.classList.add('section__section--borders') : gParentSibling2.classList.remove('section__section--borders');
 	toDo.urgent ? text.classList.add('section__label--urgent') : text.classList.remove('section__label--urgent');
 	e.target.src = toDo.urgentImg();
 }
@@ -237,5 +235,5 @@ function deleteToDoCard(e) {
 	if (newArr.length === toDo.tasks.length) {
 		card.remove();
 		toDo.deleteFromStorage();
-	} 
+	}
 }
