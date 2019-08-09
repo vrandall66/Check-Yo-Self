@@ -2,7 +2,7 @@ class ToDo {
 	constructor(id, title, tasks, urgent, finished) {
 		this.id = id;
 		this.title = title;
-		this.tasks = (tasks || []).map(function (task) {
+		this.tasks = (tasks || []).map((task) => {
 			return new ToDoTask(task.id, task.text, task.checked);
 		});
 		this.urgent = urgent || false;
@@ -10,7 +10,7 @@ class ToDo {
 	}
 
 	static getById(id) {
-		return toDosArr.find(function (toDo) {
+		return toDosArr.find((toDo) => {
 			return toDo.id === parseInt(id);
 		});
 	}
@@ -20,8 +20,8 @@ class ToDo {
 	}
 
 	deleteFromStorage() {
-		var id = this.id;
-		var index = toDosArr.findIndex(function (toDo) {
+		const id = this.id;
+		const index = toDosArr.findIndex((toDo) => {
 			return parseInt(toDo.id) === parseInt(id);
 		});
 		toDosArr.splice(index, 1);
@@ -46,9 +46,9 @@ class ToDoTask {
 	}
 
 	static getById(id) {
-		var task;
-		toDosArr.forEach(function (toDo) {
-			toDo.tasks.forEach(function (t) {
+		let task;
+		toDosArr.forEach((toDo) => {
+			toDo.tasks.forEach((t) => {
 				if (parseInt(t.id) === parseInt(id)) {
 					task = t;
 					return;

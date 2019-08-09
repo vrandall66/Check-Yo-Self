@@ -1,12 +1,12 @@
-var toDosArr = JSON.parse(localStorage.getItem('toDosArr')) || [];
-var addNewTask = document.querySelector('.form__image--add');
-var clearBtn = document.querySelector('.form__button--reset');
-var nav = document.querySelector('.navigation');
-var newTaskSection = document.querySelector('.section__ul');
-var newTask = document.querySelector('.form__label--text');
-var submitBtn = document.querySelector('.form__button-submit');
-var taskTitle = document.querySelector('.form__label--input');
-var taskSection = document.querySelector('.section__tasks');
+const toDosArr = JSON.parse(localStorage.getItem('toDosArr')) || [];
+const addNewTask = document.querySelector('.form__image--add');
+const clearBtn = document.querySelector('.form__button--reset');
+const nav = document.querySelector('.navigation');
+const newTaskSection = document.querySelector('.section__ul');
+const newTask = document.querySelector('.form__label--text');
+const submitBtn = document.querySelector('.form__button-submit');
+const taskTitle = document.querySelector('.form__label--input');
+const taskSection = document.querySelector('.section__tasks');
 
 nav.addEventListener('keyup', navKeyHandler);
 nav.addEventListener('click', checkEventLocation);
@@ -84,21 +84,21 @@ function removeTasks(e) {
 }
 
 function reassignClass(id, title, tasks, urgent, finished, i) {
-	var toDo = new ToDo(id, title, tasks, urgent, finished);
+	let toDo = new ToDo(id, title, tasks, urgent, finished);
 	toDosArr.splice(i, 1, toDo);
 }
 
 function reassignTaskClass() {
-	var tasks = Array.from(document.querySelectorAll('.li--temp-task'));
-	tasks = tasks.map(function (task) {
+	let tasks = Array.from(document.querySelectorAll('.li--temp-task'));
+	tasks = tasks.map((task) => {
 		return new ToDoTask(task.id, task.innerText);
 	});
 	return tasks;
 }
 
 function createNewToDo(e) {
-	var tasks = reassignTaskClass();
-	var toDo = new ToDo(Date.now(), taskTitle.value, tasks);
+	let tasks = reassignTaskClass();
+	let toDo = new ToDo(Date.now(), taskTitle.value, tasks);
 	toDosArr.push(toDo);
 	toDo.saveToStorage(toDosArr);
 	appendNewToDo(toDo);
@@ -125,9 +125,9 @@ function appendTempTask(e) {
 }
 
 function appendTask(toDo) {
-	var italic = "";
-	var returnString = "";
-	toDo.tasks.forEach(function (task) {
+	let italic = "";
+	let returnString = "";
+	toDo.tasks.forEach((task) => {
 		task.checked ? italic = "checked" : italic = "";
 		returnString += `<li class="li--task ${italic}" id=${task.id}>
 		<input type="image" src=${task.checkedImg()} class="li__delete">${task.text}</li>`;
@@ -136,10 +136,10 @@ function appendTask(toDo) {
 }
 
 function appendNewToDo(toDo) {
-	var urgentSrc = toDo.urgentImg();
-	var urgentClass = toDo.urgent ? "section__tasks--urgent" : "";
-	var urgentFont = toDo.urgent ? "section__label--urgent" : "";
-	var urgentBorder = toDo.urgent ? "section__section--borders" : "";
+	const urgentSrc = toDo.urgentImg();
+	const urgentClass = toDo.urgent ? "section__tasks--urgent" : "";
+	const urgentFont = toDo.urgent ? "section__label--urgent" : "";
+	const urgentBorder = toDo.urgent ? "section__section--borders" : "";
 	taskSection.insertAdjacentHTML('afterbegin',
 		`<section class="section__tasks--status ${urgentClass}" id=${toDo.id}>
 			<section class="section__section--title">
@@ -168,19 +168,19 @@ function clearToDoData(e) {
 }
 
 function persistedToDos(e) {
-	toDosArr.forEach(function (toDo, index) {
-		var id = toDo.id;
-		var title = toDo.title;
-		var tasks = toDo.tasks;
-		var urgent = toDo.urgent;
-		var finished = toDo.finished;
-		var i = index;
+	toDosArr.forEach((toDo, index) => {
+		const id = toDo.id;
+		const title = toDo.title;
+		const tasks = toDo.tasks;
+		const urgent = toDo.urgent;
+		const finished = toDo.finished;
+		const i = index;
 		reassignClass(id, title, tasks, urgent, finished, i);
 	});
 }
 
 function reinstantiateToDos() {
-	toDosArr.forEach(function (object) {
+	toDosArr.forEach((object) => {
 		appendNewToDo(object);
 	});
 }
@@ -207,19 +207,19 @@ function disableSubmitBtn(e) {
 }
 
 function checkedStatus(e) {
-	var taskId = e.target.closest('.li--task').id;
-	var task = ToDoTask.getById(taskId);
+	const taskId = e.target.closest('.li--task').id;
+	const task = ToDoTask.getById(taskId);
 	task.updateTask({ checked: !task.checked });
 	e.target.src = task.checkedImg();
 	e.target.closest('li').classList.toggle('checked');
 }
 
 function urgentStatus(e) {
-	var card = e.target.closest('.section__tasks--status');
-	var toDo = ToDo.getById(card.id);
-	var text = e.target.nextSibling.nextSibling;
-	var gGParent = e.target.parentNode.parentNode.parentNode;
-	var gParentSibling1 = e.target.parentNode.parentNode.previousSibling.previousSibling;
+	let card = e.target.closest('.section__tasks--status');
+	let toDo = ToDo.getById(card.id);
+	const text = e.target.nextSibling.nextSibling;
+	const gGParent = e.target.parentNode.parentNode.parentNode;
+	const gParentSibling1 = e.target.parentNode.parentNode.previousSibling.previousSibling;
 	toDo.updateToDo({ urgent: !toDo.urgent });
 	toDo.saveToStorage();
 	toDo.urgent ? gGParent.classList.add('section__tasks--urgent') : gGParent.classList.remove('section__tasks--urgent');
@@ -229,9 +229,9 @@ function urgentStatus(e) {
 }
 
 function deleteToDoCard(e) {
-	var card = e.target.parentNode.parentNode.parentNode;
-	var toDo = ToDo.getById(card.id);
-	var newArr = toDo.tasks.filter(obj => obj.checked === true);
+	let card = e.target.parentNode.parentNode.parentNode;
+	let toDo = ToDo.getById(card.id);
+	let newArr = toDo.tasks.filter(obj => obj.checked === true);
 	if (newArr.length === toDo.tasks.length) {
 		card.remove();
 		toDo.deleteFromStorage();
