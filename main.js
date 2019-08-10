@@ -6,15 +6,14 @@ $(document).ready(() => {
 	const nav = $('.navigation');
 	const newTaskSection = $('.section__ul');
 	let newTask = $('.form__label--text');
-	const submitBtn = document.querySelector('.form__button-submit');
-	let taskTitle = document.querySelector('.form__label--input');
-	const taskSection = document.querySelector('.section__tasks');
+	const submitBtn = $('.form__button-submit');
+	let taskTitle = $('.form__label--input');
+	const taskSection = $('.section__tasks');
 
+	onPageLoad();
 	nav.on('keyup', navKeyHandler);
 	nav.on('click', checkEventLocation);
 	taskSection.on('click', toDoTaskHandler);
-	window.on('load', onPageLoad);
-
 
 	function onPageLoad(e) {
 		welcomeMessage();
@@ -33,6 +32,7 @@ $(document).ready(() => {
 
 	function checkEventLocation(e) {
 		if (e.target.closest('.form__image--add')) {
+			e.preventDefault(e);
 			checkTaskInputValue(e);
 			appendTempTask(e);
 			checkTaskInputValue(e);
@@ -66,7 +66,7 @@ $(document).ready(() => {
 	}
 
 	function welcomeMessage() {
-		var welcomeText = document.querySelector('.aside__section--container');
+		let welcomeText = $('.aside__section--container');
 		if (toDosArr.length > 0) {
 			welcomeText.addClass("hidden");
 		}
@@ -88,12 +88,12 @@ $(document).ready(() => {
 	function reassignClass(id, title, tasks, urgent, finished, i) {
 		let toDo = new ToDo(id, title, tasks, urgent, finished);
 		toDosArr.splice(i, 1, toDo);
-	};
+	}
 
 	function reassignTaskClass() {
-		let tasks = Array.from(document.querySelectorAll('.li--temp-task'));
-		tasks = tasks.map(function (task) {
-			return new ToDoTask(task.id, task.innerText)
+		let tasks = Array.from($('.li--temp-task'));
+		tasks = tasks.map((task) => {
+			return new ToDoTask(task.id, task.innerText);
 		});
 		return tasks;
 	}
@@ -106,7 +106,7 @@ $(document).ready(() => {
 		appendNewToDo(toDo);
 		taskTitle.value = "";
 		newTask.value = "";
-	};
+	}
 
 	function checkTaskInputValue(e) {
 		if (newTask.value === "") {
@@ -120,8 +120,7 @@ $(document).ready(() => {
 
 	function appendTempTask(e) {
 		e.preventDefault();
-		newTaskSection.insertAdjacentHTML('beforeend',
-			`<li class="li--task li--temp-task" id=${Date.now()}>
+		newTaskSection.append(`<li class="li--task li--temp-task" id=${Date.now()}>
 		<input type="image" src="images/delete.svg" class="li__delete">${newTask.value}</li>`);
 		newTask.value = "";
 	}
@@ -129,11 +128,11 @@ $(document).ready(() => {
 	function appendTask(toDo) {
 		let italic = "";
 		let returnString = "";
-		toDo.tasks.forEach(function (task) {
+		toDo.tasks.forEach((task) => {
 			task.checked ? italic = "checked" : italic = "";
 			returnString += `<li class="li--task ${italic}" id=${task.id}>
 		<input type="image" src=${task.checkedImg()} class="li__delete">${task.text}</li>`;
-		})
+		});
 		return returnString;
 	}
 
@@ -142,8 +141,7 @@ $(document).ready(() => {
 		let urgentClass = toDo.urgent ? "section__tasks--urgent" : "";
 		let urgentFont = toDo.urgent ? "section__label--urgent" : "";
 		let urgentBorder = toDo.urgent ? "section__section--borders" : "";
-		taskSection.insertAdjacentHTML('afterbegin',
-			`<section class="section__tasks--status ${urgentClass}" id=${toDo.id}>
+		taskSection.append(`<section class="section__tasks--status ${urgentClass}" id=${toDo.id}>
 			<section class="section__section--title ${urgentBorder}">
 				<h2 class="section__section--h2">${toDo.title}</h2>
 			</section>
@@ -152,40 +150,40 @@ $(document).ready(() => {
 					${appendTask(toDo)}
 				</ul>
 			</section>
-		<section class="section__section--status">
-			<section class="section__section--left">
-				<input type="image" src=${urgentSrc} name="section__input--urgent" class="section__input--urgent icon--small" alt="Red lightning bolt icon">
-				<label for="section__input--urgent" class="section__section--label ${urgentFont}">URGENT</label>
+			<section class="section__section--status">
+				<section class="section__section--left">
+					<input type="image" src=${urgentSrc} name="section__input--urgent" class="section__input--urgent icon--small" alt="Red lightning bolt icon">
+					<label for="section__input--urgent" class="section__section--label ${urgentFont}">URGENT</label>
+				</section>
+				<section class="section__section--right">
+					<input type="image" src="images/delete.svg" name="section__input--delete" class="section__input--delete icon--small" alt="Circle with X in the center">
+					<label for="section__input--delete" class="section__section--label">DELETE</label>
+				</section>
 			</section>
-			<section class="section__section--right">
-				<input type="image" src="images/delete.svg" name="section__input--delete" class="section__input--delete icon--small" alt="Circle with X in the center">
-				<label for="section__input--delete" class="section__section--label">DELETE</label>
-			</section>
-		</section>
-	</section>`)
+		</section>`);
 	}
 
 	function clearToDoData(e) {
-		document.querySelector('.section__ul').innerHTML = "";
+		$('.section__ul').innerHTML = "";
 	}
 
 	function persistedToDos(e) {
-		for (let i = 0; i < toDosArr.length; i++) {
-			let id = toDosArr[i].id;
-			let title = toDosArr[i].title;
-			let tasks = toDosArr[i].tasks;
-			let urgent = toDosArr[i].urgent;
-			let finished = toDosArr[i].finished;
-			let index = i;
+		toDosArr.forEach((toDo, index) => {
+			const id = toDo.id;
+			const title = toDo.title;
+			const tasks = toDo.tasks;
+			const urgent = toDo.urgent;
+			const finished = toDo.finished;
+			const i = index;
 			reassignClass(id, title, tasks, urgent, finished, i);
-		}
+		});
 	}
 
 	function reinstantiateToDos() {
-		toDosArr.forEach(function (object) {
+		toDosArr.forEach((object) => {
 			appendNewToDo(object);
 		});
-	};
+	}
 
 	function disableClearBtn(e) {
 		if (taskTitle.value !== "" ||
@@ -217,12 +215,12 @@ $(document).ready(() => {
 	}
 
 	function urgentStatus(e) {
-		var card = e.target.closest('.section__tasks--status');
-		var toDo = ToDo.getById(card.id);
-		var text = e.target.nextSibling.nextSibling;
-		var gGParent = e.target.parentNode.parentNode.parentNode;
-		var gParentSibling1 = e.target.parentNode.parentNode.previousSibling.previousSibling;
-		var gParentSibling2 = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling;
+		let card = e.target.closest('.section__tasks--status');
+		let toDo = ToDo.getById(card.id);
+		let text = e.target.nextSibling.nextSibling;
+		let gGParent = e.target.parentNode.parentNode.parentNode;
+		let gParentSibling1 = e.target.parentNode.parentNode.previousSibling.previousSibling;
+		let gParentSibling2 = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling;
 		toDo.updateToDo({ urgent: !toDo.urgent });
 		toDo.saveToStorage();
 		toDo.urgent ? gGParent.addClass("section__tasks--urgent") : gGParent.removeClass("section__tasks--urgent");
@@ -233,12 +231,12 @@ $(document).ready(() => {
 	}
 
 	function deleteToDoCard(e) {
-		var card = e.target.parentNode.parentNode.parentNode;
-		var toDo = ToDo.getById(card.id);
-		var newArr = toDo.tasks.filter(obj => obj.checked === true)
+		let card = e.target.parentNode.parentNode.parentNode;
+		let toDo = ToDo.getById(card.id);
+		let newArr = toDo.tasks.filter(obj => obj.checked === true);
 		if (newArr.length === toDo.tasks.length) {
 			card.remove();
 			toDo.deleteFromStorage();
 		}
 	}
-})
+});

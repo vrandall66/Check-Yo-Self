@@ -1,20 +1,19 @@
 $(document).ready(() => {
-
 	class ToDo {
 		constructor(id, title, tasks, urgent, finished) {
 			this.id = id;
 			this.title = title;
-			this.tasks = (tasks || []).map(function (task) {
-				return new ToDoTask(task.id, task.text, task.checked)
+			this.tasks = (tasks || []).map((task) => {
+				return new ToDoTask(task.id, task.text, task.checked);
 			});
 			this.urgent = urgent || false;
 			this.finished = finished || false;
 		}
 
 		static getById(id) {
-			return toDosArr.find(function (toDo) {
+			return toDosArr.find((toDo) => {
 				return toDo.id === parseInt(id);
-			})
+			});
 		}
 
 		saveToStorage() {
@@ -22,16 +21,16 @@ $(document).ready(() => {
 		}
 
 		deleteFromStorage() {
-			var id = this.id;
-			var index = toDosArr.findIndex(function (toDo) {
+			let id = this.id;
+			let index = toDosArr.findIndex((toDo) => {
 				return parseInt(toDo.id) === parseInt(id);
-			})
+			});
 			toDosArr.splice(index, 1);
 			this.saveToStorage();
-		};
+		}
 
 		updateToDo(obj) {
-			Object.assign(this, obj)
+			Object.assign(this, obj);
 			this.saveToStorage();
 		}
 
@@ -48,15 +47,15 @@ $(document).ready(() => {
 		}
 
 		static getById(id) {
-			var task;
-			toDosArr.forEach(function (toDo) {
-				toDo.tasks.forEach(function (t) {
+			let task;
+			toDosArr.forEach((toDo) => {
+				toDo.tasks.forEach((t) => {
 					if (parseInt(t.id) === parseInt(id)) {
 						task = t;
 						return;
-					};
-				})
-			})
+					}
+				});
+			});
 			return task;
 		}
 
@@ -65,7 +64,7 @@ $(document).ready(() => {
 		}
 
 		updateTask(obj) {
-			Object.assign(this, obj)
+			Object.assign(this, obj);
 			this.saveToStorage();
 		}
 
@@ -73,5 +72,4 @@ $(document).ready(() => {
 			return this.checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg';
 		}
 	}
-
-})
+});
