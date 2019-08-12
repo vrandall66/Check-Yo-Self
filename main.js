@@ -1,12 +1,14 @@
+const $ = require('jquery');
+
 var toDosArr = JSON.parse(localStorage.getItem('toDosArr')) || [];
-var addNewTask = document.querySelector('.form__image--add');
-var clearBtn = document.querySelector('.form__button--reset');
-var nav = document.querySelector('.navigation');
-var newTaskSection = document.querySelector('.section__ul');
-var newTask = document.querySelector('.form__label--text');
-var submitBtn = document.querySelector('.form__button-submit');
-var taskTitle = document.querySelector('.form__label--input');
-var taskSection = document.querySelector('.section__tasks');
+var addNewTask = $('.form__image--add');
+var clearBtn = $('.form__button--reset');
+var nav = $('.navigation');
+var newTaskSection = $('.section__ul');
+var newTask = $('.form__label--text');
+var submitBtn = $('.form__button-submit');
+var taskTitle = $('.form__label--input');
+var taskSection = $('.section__tasks');
 
 nav.addEventListener('keyup', navKeyHandler);
 nav.addEventListener('click', checkEventLocation);
